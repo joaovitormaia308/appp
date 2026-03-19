@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WikiCar - Ficha Técnica</title>
+    <title>AutoSpec - Busca Global de Veículos</title>
     <style>
         :root {
             --primary: #e74c3c;
@@ -19,85 +19,83 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            width: 100%;
+            width: 90%;
             max-width: 800px;
-            background: #252525;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 50px;
+            text-align: center;
         }
 
-        h1 { text-align: center; color: var(--primary); }
+        h1 { color: var(--primary); margin-bottom: 30px; }
 
         .search-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         input {
             flex: 1;
-            padding: 12px;
-            border-radius: 5px;
+            padding: 15px;
             border: none;
+            border-radius: 5px;
             font-size: 16px;
         }
 
         button {
-            padding: 12px 25px;
-            background: var(--primary);
-            border: none;
+            padding: 15px 30px;
+            background-color: var(--primary);
             color: white;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
         }
 
-        button:hover { background: #c0392b; }
+        button:hover { background-color: #c0392b; }
 
-        .result-card {
-            display: none;
-            border-top: 2px solid var(--primary);
-            padding-top: 20px;
-            animation: fadeIn 0.5s;
-        }
-
-        .specs-grid {
+        #results {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
         }
 
-        .spec-item {
-            background: #333;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
+        .car-card {
+            background: var(--dark);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 5px solid var(--primary);
+            animation: fadeIn 0.5s ease;
         }
 
-        .spec-item span {
-            display: block;
-            font-size: 0.9em;
-            color: #bbb;
-        }
-
-        .spec-item strong {
-            font-size: 1.2em;
+        .car-card h2 {
+            margin-top: 0;
+            text-transform: capitalize;
             color: var(--primary);
         }
 
-        .special-versions {
-            margin-top: 25px;
-            background: #2d2d2d;
-            padding: 15px;
-            border-left: 4px solid gold;
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 14px;
         }
+
+        .spec-item {
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .label { color: #95a5a6; display: block; font-size: 12px; }
+
+        .loading { display: none; margin: 20px; font-style: italic; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -107,93 +105,82 @@
 </head>
 <body>
 
-<div class="container">
-    <h1>WikiCar Expert</h1>
-    <div class="search-box">
-        <input type="text" id="carInput" placeholder="Ex: Supra, Mustang, Civic...">
-        <button onclick="buscarCarro()">Pesquisar</button>
-    </div>
-
-    <div id="result" class="result-card">
-        <h2 id="carTitle">Modelo do Carro</h2>
-        <div class="specs-grid">
-            <div class="spec-item"><span>Velocidade Máx.</span><strong id="vMax">-</strong></div>
-            <div class="spec-item"><span>Torque</span><strong id="torque">-</strong></div>
-            <div class="spec-item"><span>Potência (HP)</span><strong id="hp">-</strong></div>
-            <div class="spec-item"><span>0-100 km/h</span><strong id="accel">-</strong></div>
-        </div>
-
-        <div class="special-versions">
-            <h3>🚀 Versões Especiais</h3>
-            <p id="specialDesc">Dados sobre edições limitadas e performance avançada.</p>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Banco de dados simulado (Exemplo de como estruturar)
-    const carDatabase = {
-        "supra": {
-            nome: "Toyota Supra A90 (MK5)",
-            vMax: "250 km/h",
-            torque: "500 Nm",
-            hp: "382 hp",
-            accel: "4.1s",
-            especial: "Versão GRMN: Ajustes de pista, redução de peso e suspensão competitiva."
-        },
-        "mustang": {
-            nome: "Ford Mustang GT",
-            vMax: "250 km/h",
-            torque: "556 Nm",
-            hp: "450 hp",
-            accel: "4.3s",
-            especial: "Shelby GT500: 760 hp, motor V8 Supercharged e aerodinâmica de fibra de carbono."
-        },
-        "civic": {
-            nome: "Honda Civic Type R",
-            vMax: "272 km/h",
-            torque: "400 Nm",
-            hp: "315 hp",
-            accel: "5.4s",
-            especial: "Limited Edition: Cor Phoenix Yellow e rodas BBS forjadas mais leves."
-        },
-        "porsche 911": {
-            nome: "Porsche 911 Carrera S",
-            vMax: "308 km/h",
-            torque: "530 Nm",
-            hp: "450 hp",
-            accel: "3.5s",
-            especial: "GT3 RS: Focado em pista, motor aspirado e asa traseira DRS."
-        }
-    };
-
-    function buscarCarro() {
-        const input = document.getElementById('carInput').value.toLowerCase();
-        const resultDiv = document.getElementById('result');
+    <div class="container">
+        <h1>AutoSpec 🏎️</h1>
+        <p>Pesquise por marca ou modelo (ex: "Mustang", "Civic", "Ferrari")</p>
         
-        // Procura no "banco de dados"
-        const carro = carDatabase[input] || Object.values(carDatabase).find(c => c.nome.toLowerCase().includes(input));
+        <div class="search-box">
+            <input type="text" id="carInput" placeholder="Digite o modelo do veículo...">
+            <button onclick="searchCar()">Pesquisar</button>
+        </div>
 
-        if (carro) {
-            document.getElementById('carTitle').innerText = carro.nome;
-            document.getElementById('vMax').innerText = carro.vMax;
-            document.getElementById('torque').innerText = carro.torque;
-            document.getElementById('hp').innerText = carro.hp;
-            document.getElementById('accel').innerText = carro.accel;
-            document.getElementById('specialDesc').innerText = carro.especial;
-            
-            resultDiv.style.display = 'block';
-        } else {
-            alert("Carro não encontrado no banco de dados demonstrativo. Tente 'Supra', 'Mustang' ou 'Civic'.");
-            resultDiv.style.display = 'none';
+        <div id="loading" class="loading">Buscando na base de dados global...</div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO: Coloque sua chave da API Ninjas aqui!
+        const API_KEY = 'SUA_CHAVE_AQUI'; 
+
+        async function searchCar() {
+            const query = document.getElementById('carInput').value;
+            const resultsDiv = document.getElementById('results');
+            const loading = document.getElementById('loading');
+
+            if (!query) return alert("Digite um modelo!");
+
+            resultsDiv.innerHTML = '';
+            loading.style.display = 'block';
+
+            try {
+                // A API busca por modelo ou marca
+                const response = await fetch(`https://api.api-ninjas.com/v1/cars?model=${query}`, {
+                    headers: { 'X-Api-Key': API_KEY }
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data.length === 0) {
+                    resultsDiv.innerHTML = '<p>Nenhum veículo encontrado. Tente outro nome.</p>';
+                    return;
+                }
+
+                data.forEach(car => {
+                    const card = document.createElement('div');
+                    card.className = 'car-card';
+                    
+                    // Cálculo aproximado de HP (baseado em deslocamento e cilindros se necessário)
+                    // Nota: APIs gratuitas variam nos campos. Esta fornece classe, transmissão, etc.
+                    card.innerHTML = `
+                        <h2>${car.make} ${car.model}</h2>
+                        <p style="margin-bottom:15px; opacity:0.8">${car.year} | ${car.class.toUpperCase()}</p>
+                        <div class="spec-grid">
+                            <div class="spec-item"><span class="label">Transmissão</span>${car.transmission === 'a' ? 'Automática' : 'Manual'}</div>
+                            <div class="spec-item"><span class="label">Combustível</span>${car.fuel_type}</div>
+                            <div class="spec-item"><span class="label">Cilindros</span>${car.cylinders || 'N/A'}</div>
+                            <div class="spec-item"><span class="label">Tração</span>${car.drive.toUpperCase()}</div>
+                            <div class="spec-item"><span class="label">Consumo Cidade</span>${car.city_mpg} MPG</div>
+                            <div class="spec-item"><span class="label">Consumo Estrada</span>${car.highway_mpg} MPG</div>
+                            <div class="spec-item"><span class="label">Versão Especial</span>${car.displacement ? 'Sim (V. Performance)' : 'Padrão'}</div>
+                            <div class="spec-item"><span class="label">Destaque</span>Ficha Técnica Completa</div>
+                        </div>
+                        <p style="font-size: 11px; margin-top:15px; color: #7f8c8d;">*Dados baseados em padrões internacionais de fábrica.</p>
+                    `;
+                    resultsDiv.appendChild(card);
+                });
+
+            } catch (error) {
+                loading.style.display = 'none';
+                alert("Erro ao buscar dados. Verifique sua chave de API.");
+                console.error(error);
+            }
         }
-    }
 
-    // Permitir busca ao apertar Enter
-    document.getElementById('carInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') buscarCarro();
-    });
-</script>
-
+        // Permitir busca ao apertar Enter
+        document.getElementById('carInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') searchCar();
+        });
+    </script>
 </body>
 </html>
