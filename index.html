@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikiCar - Ficha Técnica</title>
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: var(--light);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #252525;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h1 { text-align: center; color: var(--primary); }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: var(--primary);
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #c0392b; }
+
+        .result-card {
+            display: none;
+            border-top: 2px solid var(--primary);
+            padding-top: 20px;
+            animation: fadeIn 0.5s;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .spec-item {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .spec-item span {
+            display: block;
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        .spec-item strong {
+            font-size: 1.2em;
+            color: var(--primary);
+        }
+
+        .special-versions {
+            margin-top: 25px;
+            background: #2d2d2d;
+            padding: 15px;
+            border-left: 4px solid gold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>WikiCar Expert</h1>
+    <div class="search-box">
+        <input type="text" id="carInput" placeholder="Ex: Supra, Mustang, Civic...">
+        <button onclick="buscarCarro()">Pesquisar</button>
+    </div>
+
+    <div id="result" class="result-card">
+        <h2 id="carTitle">Modelo do Carro</h2>
+        <div class="specs-grid">
+            <div class="spec-item"><span>Velocidade Máx.</span><strong id="vMax">-</strong></div>
+            <div class="spec-item"><span>Torque</span><strong id="torque">-</strong></div>
+            <div class="spec-item"><span>Potência (HP)</span><strong id="hp">-</strong></div>
+            <div class="spec-item"><span>0-100 km/h</span><strong id="accel">-</strong></div>
+        </div>
+
+        <div class="special-versions">
+            <h3>🚀 Versões Especiais</h3>
+            <p id="specialDesc">Dados sobre edições limitadas e performance avançada.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Banco de dados simulado (Exemplo de como estruturar)
+    const carDatabase = {
+        "supra": {
+            nome: "Toyota Supra A90 (MK5)",
+            vMax: "250 km/h",
+            torque: "500 Nm",
+            hp: "382 hp",
+            accel: "4.1s",
+            especial: "Versão GRMN: Ajustes de pista, redução de peso e suspensão competitiva."
+        },
+        "mustang": {
+            nome: "Ford Mustang GT",
+            vMax: "250 km/h",
+            torque: "556 Nm",
+            hp: "450 hp",
+            accel: "4.3s",
+            especial: "Shelby GT500: 760 hp, motor V8 Supercharged e aerodinâmica de fibra de carbono."
+        },
+        "civic": {
+            nome: "Honda Civic Type R",
+            vMax: "272 km/h",
+            torque: "400 Nm",
+            hp: "315 hp",
+            accel: "5.4s",
+            especial: "Limited Edition: Cor Phoenix Yellow e rodas BBS forjadas mais leves."
+        },
+        "porsche 911": {
+            nome: "Porsche 911 Carrera S",
+            vMax: "308 km/h",
+            torque: "530 Nm",
+            hp: "450 hp",
+            accel: "3.5s",
+            especial: "GT3 RS: Focado em pista, motor aspirado e asa traseira DRS."
+        }
+    };
+
+    function buscarCarro() {
+        const input = document.getElementById('carInput').value.toLowerCase();
+        const resultDiv = document.getElementById('result');
+        
+        // Procura no "banco de dados"
+        const carro = carDatabase[input] || Object.values(carDatabase).find(c => c.nome.toLowerCase().includes(input));
+
+        if (carro) {
+            document.getElementById('carTitle').innerText = carro.nome;
+            document.getElementById('vMax').innerText = carro.vMax;
+            document.getElementById('torque').innerText = carro.torque;
+            document.getElementById('hp').innerText = carro.hp;
+            document.getElementById('accel').innerText = carro.accel;
+            document.getElementById('specialDesc').innerText = carro.especial;
+            
+            resultDiv.style.display = 'block';
+        } else {
+            alert("Carro não encontrado no banco de dados demonstrativo. Tente 'Supra', 'Mustang' ou 'Civic'.");
+            resultDiv.style.display = 'none';
+        }
+    }
+
+    // Permitir busca ao apertar Enter
+    document.getElementById('carInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') buscarCarro();
+    });
+</script>
+
+</body>
+</html>
