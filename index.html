@@ -3,184 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoSpec - Busca Global de Veículos</title>
+    <title>BrasilDrive 80-26 | Enciclopédia Automotiva</title>
     <style>
         :root {
-            --primary: #e74c3c;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
+            --primary: #e63946;
+            --dark: #1d3557;
+            --light: #f1faee;
+            --accent: #457b9d;
+            --gray: #ced4da;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a1a;
+            background-color: #0b132b;
             color: var(--light);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
         }
 
-        .container {
-            width: 90%;
-            max-width: 800px;
-            margin-top: 50px;
+        header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            padding: 60px 20px;
             text-align: center;
+            border-bottom: 4px solid var(--primary);
         }
 
-        h1 { color: var(--primary); margin-bottom: 30px; }
+        h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
+        p.subtitle { margin-bottom: 20px; opacity: 0.8; }
 
-        .search-box {
+        .search-container {
+            max-width: 800px;
+            margin: -30px auto 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
             display: flex;
             gap: 10px;
-            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        input {
+        input, select {
             flex: 1;
-            padding: 15px;
-            border: none;
+            padding: 12px;
+            border: 1px solid var(--gray);
             border-radius: 5px;
-            font-size: 16px;
+            outline: none;
         }
 
         button {
-            padding: 15px 30px;
             background-color: var(--primary);
             color: white;
             border: none;
+            padding: 12px 25px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
         }
 
-        button:hover { background-color: #c0392b; }
+        button:hover { background-color: #c1121f; }
 
-        #results {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            width: 100%;
+            gap: 25px;
         }
 
         .car-card {
-            background: var(--dark);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: left;
-            border-left: 5px solid var(--primary);
-            animation: fadeIn 0.5s ease;
+            background: #1a2a41;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid #2e4a7d;
         }
 
-        .car-card h2 {
-            margin-top: 0;
-            text-transform: capitalize;
-            color: var(--primary);
+        .car-card:hover { transform: translateY(-10px); }
+
+        .car-img {
+            width: 100%;
+            height: 200px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #666;
         }
 
-        .spec-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            font-size: 14px;
+        .car-info { padding: 20px; }
+        .car-info h3 { color: var(--primary); margin-bottom: 10px; }
+        
+        .spec-table {
+            width: 100%;
+            font-size: 0.85rem;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
 
-        .spec-item {
-            background: rgba(255,255,255,0.05);
-            padding: 8px;
+        .spec-table td {
+            padding: 5px 0;
+            border-bottom: 1px solid #2e4a7d;
+        }
+
+        .spec-label { font-weight: bold; color: var(--accent); }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            padding: 3px 8px;
             border-radius: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 10px;
         }
 
-        .label { color: #95a5a6; display: block; font-size: 12px; }
-
-        .loading { display: none; margin: 20px; font-style: italic; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.9rem;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>AutoSpec 🏎️</h1>
-        <p>Pesquise por marca ou modelo (ex: "Mustang", "Civic", "Ferrari")</p>
-        
-        <div class="search-box">
-            <input type="text" id="carInput" placeholder="Digite o modelo do veículo...">
-            <button onclick="searchCar()">Pesquisar</button>
-        </div>
+<header>
+    <h1>BrasilDrive 80-26</h1>
+    <p class="subtitle">A maior ficha técnica de carros brasileiros (1980 - 2026)</p>
+</header>
 
-        <div id="loading" class="loading">Buscando na base de dados global...</div>
-        <div id="results"></div>
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Ex: Gol GTI, Opala, BYD Dolphin...">
+    <select id="yearFilter">
+        <option value="">Todos os Anos</option>
+        <option value="80">Anos 80</option>
+        <option value="90">Anos 90</option>
+        <option value="00">Anos 2000</option>
+        <option value="10">Anos 2010</option>
+        <option value="20">Anos 2020+</option>
+    </select>
+    <button onclick="filtrar()">Buscar</button>
+</div>
+
+<main class="container" id="carGrid">
+    <div class="car-card">
+        <div class="car-img" style="background: url('https://images.unsplash.com/photo-1606016159991-fed44294e845?q=80&w=300') center/cover;"></div>
+        <div class="car-info">
+            <span class="badge">Clássico Nacional</span>
+            <h3>Volkswagen Gol GTI (1989)</h3>
+            <table class="spec-table">
+                <tr><td class="spec-label">Motor:</td><td>2.0 8V (Injeção Eletrônica)</td></tr>
+                <tr><td class="spec-label">Potência:</td><td>120 cv</td></tr>
+                <tr><td class="spec-label">0-100 km/h:</td><td>8,8s</td></tr>
+                <tr><td class="spec-label">Vel. Máxima:</td><td>185 km/h</td></tr>
+                <tr><td class="spec-label">Transmissão:</td><td>Manual 5 marchas</td></tr>
+            </table>
+        </div>
     </div>
 
-    <script>
-        // CONFIGURAÇÃO: Coloque sua chave da API Ninjas aqui!
-        const API_KEY = 'SUA_CHAVE_AQUI'; 
+    <div class="car-card">
+        <div class="car-img" style="background: url('https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=300') center/cover;"></div>
+        <div class="car-info">
+            <span class="badge">Elétrico / Lançamento</span>
+            <h3>BYD Seal (2024/2025)</h3>
+            <table class="spec-table">
+                <tr><td class="spec-label">Motor:</td><td>Elétrico (Dual Motor)</td></tr>
+                <tr><td class="spec-label">Potência:</td><td>531 cv</td></tr>
+                <tr><td class="spec-label">Autonomia:</td><td>372 km (PBEV)</td></tr>
+                <tr><td class="spec-label">Tração:</td><td>Integral (AWD)</td></tr>
+                <tr><td class="spec-label">Tecnologia:</td><td>ADAS Nível 2+</td></tr>
+            </table>
+        </div>
+    </div>
 
-        async function searchCar() {
-            const query = document.getElementById('carInput').value;
-            const resultsDiv = document.getElementById('results');
-            const loading = document.getElementById('loading');
+    <div class="car-card">
+        <div class="car-img" style="background: url('https://images.unsplash.com/photo-1619682817481-e994891cd1f5?q=80&w=300') center/cover;"></div>
+        <div class="car-info">
+            <span class="badge">Ícone dos 90s</span>
+            <h3>Chevrolet Opala Diplomata (1992)</h3>
+            <table class="spec-table">
+                <tr><td class="spec-label">Motor:</td><td>4.1 / 6 cilindros em linha</td></tr>
+                <tr><td class="spec-label">Potência:</td><td>121 cv</td></tr>
+                <tr><td class="spec-label">Torque:</td><td>29 kgfm</td></tr>
+                <tr><td class="spec-label">Combustível:</td><td>Álcool / Gasolina</td></tr>
+                <tr><td class="spec-label">Curiosidade:</td><td>Último ano de produção</td></tr>
+            </table>
+        </div>
+    </div>
+</main>
 
-            if (!query) return alert("Digite um modelo!");
+<footer>
+    <p>&copy; 2026 BrasilDrive - Todos os direitos reservados. Dados técnicos baseados em catálogos de fábrica.</p>
+</footer>
 
-            resultsDiv.innerHTML = '';
-            loading.style.display = 'block';
+<script>
+    function filtrar() {
+        alert("Função de busca ativada! Para um app real, aqui conectaríamos a uma API de carros.");
+    }
+</script>
 
-            try {
-                // A API busca por modelo ou marca
-                const response = await fetch(`https://api.api-ninjas.com/v1/cars?model=${query}`, {
-                    headers: { 'X-Api-Key': API_KEY }
-                });
-
-                const data = await response.json();
-                loading.style.display = 'none';
-
-                if (data.length === 0) {
-                    resultsDiv.innerHTML = '<p>Nenhum veículo encontrado. Tente outro nome.</p>';
-                    return;
-                }
-
-                data.forEach(car => {
-                    const card = document.createElement('div');
-                    card.className = 'car-card';
-                    
-                    // Cálculo aproximado de HP (baseado em deslocamento e cilindros se necessário)
-                    // Nota: APIs gratuitas variam nos campos. Esta fornece classe, transmissão, etc.
-                    card.innerHTML = `
-                        <h2>${car.make} ${car.model}</h2>
-                        <p style="margin-bottom:15px; opacity:0.8">${car.year} | ${car.class.toUpperCase()}</p>
-                        <div class="spec-grid">
-                            <div class="spec-item"><span class="label">Transmissão</span>${car.transmission === 'a' ? 'Automática' : 'Manual'}</div>
-                            <div class="spec-item"><span class="label">Combustível</span>${car.fuel_type}</div>
-                            <div class="spec-item"><span class="label">Cilindros</span>${car.cylinders || 'N/A'}</div>
-                            <div class="spec-item"><span class="label">Tração</span>${car.drive.toUpperCase()}</div>
-                            <div class="spec-item"><span class="label">Consumo Cidade</span>${car.city_mpg} MPG</div>
-                            <div class="spec-item"><span class="label">Consumo Estrada</span>${car.highway_mpg} MPG</div>
-                            <div class="spec-item"><span class="label">Versão Especial</span>${car.displacement ? 'Sim (V. Performance)' : 'Padrão'}</div>
-                            <div class="spec-item"><span class="label">Destaque</span>Ficha Técnica Completa</div>
-                        </div>
-                        <p style="font-size: 11px; margin-top:15px; color: #7f8c8d;">*Dados baseados em padrões internacionais de fábrica.</p>
-                    `;
-                    resultsDiv.appendChild(card);
-                });
-
-            } catch (error) {
-                loading.style.display = 'none';
-                alert("Erro ao buscar dados. Verifique sua chave de API.");
-                console.error(error);
-            }
-        }
-
-        // Permitir busca ao apertar Enter
-        document.getElementById('carInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') searchCar();
-        });
-    </script>
 </body>
 </html>
